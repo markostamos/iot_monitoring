@@ -1,1 +1,0 @@
-Opaaaa na tos 
