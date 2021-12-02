@@ -12,10 +12,11 @@ app.config['SECRET'] = 'my secret key'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['MQTT_BROKER_URL'] = 'broker.hivemq.com'
 app.config['MQTT_BROKER_PORT'] = 1883
-app.config['MQTT_USERNAME'] = 'aris'
-app.config['MQTT_PASSWORD'] = 'sg'
-app.config['MQTT_KEEPALIVE'] = 5
+app.config['MQTT_USERNAME'] = ''
+app.config['MQTT_PASSWORD'] = ''
+app.config['MQTT_KEEPALIVE'] = 50
 app.config['MQTT_TLS_ENABLED'] = False
+
 
 # Parameters for SSL enabled
 # app.config['MQTT_BROKER_PORT'] = 8883
@@ -58,14 +59,20 @@ def handle_mqtt_message(client, userdata, message):
         topic=message.topic,
         payload=message.payload.decode()
     )
+    print(f'message is {data["payload"]} ')
     socketio.emit('mqtt_message', data=data)
 
 
 @mqtt.on_log()
 def handle_logging(client, userdata, level, buf):
     print(level, buf)
-    print("logged")
+   
 
+
+@mqtt.on_connect()
+def handle_connect(client, userdata, flags, rc):
+    mqtt.subscribe('sensors/temp')
+    print("connected")
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5000, use_reloader=False, debug=True)
