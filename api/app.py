@@ -27,6 +27,7 @@ mqtt = Mqtt(app)
 socketio = SocketIO(app)
 #bootstrap = Bootstrap(app)
 
+###
 
 @app.route('/')
 def index():
