@@ -5,7 +5,22 @@
     <title>Flask-SocketIO Test</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
-
+    <style>
+    html {
+     font-family: Arial;
+     display: inline-block;
+     margin: 0px auto;
+     text-align: center;
+    }
+    h2 { font-size: 3.0rem; }
+    p { font-size: 3.0rem; }
+    .units { font-size: 1.2rem; }
+    .dht-labels{
+      font-size: 1.5rem;
+      vertical-align:middle;
+      padding-bottom: 15px;
+    }
+  </style>
 
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
@@ -31,6 +46,9 @@
                 var payload = JSON.parse(msg["payload"]);
                 console.log(payload);
                 console.log(payload["tmp"]);
+                $("#temperature").text(payload["tmp"]);
+                $("#humidity").text(payload["humidity"]);
+
                 $('#log').append('<br>' + $('<div/>').text('Received #' + msg["topic"] + ': ' + msg["payload"]).html());
                 if (cb)
                     cb();
@@ -41,11 +59,18 @@
     </script>
 </head>
 <body>
-    <h1>Flask-SocketIO Test</h1>
-  
-    <h2>Receive:</h2>
-    <div id="log"></div>
-
-    
+<h2>ESP8266 DHT Server</h2>
+  <p>
+    <i class="fas fa-thermometer-half" style="color:#059e8a;"></i> 
+    <span class="dht-labels">Temperature</span> 
+    <span id="temperature">tmp</span>
+    <sup class="units">&deg;C</sup>
+  </p>
+  <p>
+    <i class="fas fa-tint" style="color:#00add6;"></i> 
+    <span class="dht-labels">Humidity</span>
+    <span id="humidity">humidity</span>
+    <sup class="units">%</sup>
+  </p>
 </body>
 </html>
