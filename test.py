@@ -35,4 +35,3 @@ if __name__ == "__main__":
         print(payload)
         pub.publish(topic, payload)
         sleep(1)
-#asasasa
