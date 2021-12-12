@@ -5,6 +5,8 @@
     <title>Flask-SocketIO Test</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+
+
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
             // Connect to the Socket.IO server.
@@ -25,6 +27,10 @@
             // to the client. The data is then displayed in the "Received"
             // section of the page.
             socket.on("mqtt_message",function(msg,cb){
+                
+                var payload = JSON.parse(msg["payload"]);
+                console.log(payload);
+                console.log(payload["tmp"]);
                 $('#log').append('<br>' + $('<div/>').text('Received #' + msg["topic"] + ': ' + msg["payload"]).html());
                 if (cb)
                     cb();
@@ -39,5 +45,7 @@
   
     <h2>Receive:</h2>
     <div id="log"></div>
+
+    
 </body>
 </html>

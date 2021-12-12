@@ -42,7 +42,6 @@ def handle_publish(json_str):
     mqtt.publish(data['topic'], data['message'])
 
 
-
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
     data = dict(
@@ -56,16 +55,14 @@ def handle_mqtt_message(client, userdata, message):
 @mqtt.on_log()
 def handle_logging(client, userdata, level, buf):
     print(level, buf)
-   
 
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
-    mqtt.subscribe('sensors/temp')
+    mqtt.subscribe('sensors')
     print("connected")
 
+
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000, use_reloader=False, debug=True)
-
-
-
+    socketio.run(app, host='0.0.0.0', port=5000,
+                 use_reloader=False, debug=True)
