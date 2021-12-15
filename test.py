@@ -2,7 +2,8 @@ import paho.mqtt.client as paho
 from random import randint
 import CONFIG
 import json
-from time import sleep
+import time
+import datetime
 
 
 class Publisher():
@@ -30,8 +31,10 @@ if __name__ == "__main__":
     topic = "sensors"
 
     while True:
-
-        payload = {"tmp": randint(-10, 40), "humidity": randint(0, 100)}
+        d = datetime.datetime.utcnow()
+        for_js = int(time.mktime(d.timetuple())) * 1000
+        payload = {
+            "temperature": randint(-10, 40), "humidity": randint(0, 100), "timestamp": for_js}
         print(payload)
         pub.publish(topic, payload)
-        sleep(1)
+        time.sleep(2)
