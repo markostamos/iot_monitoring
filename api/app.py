@@ -22,7 +22,7 @@ app.config['MQTT_TLS_ENABLED'] = False
 
 # MONGODB CONFIG
 app.config['SECRET_KEY'] = "mysecretkey"
-app.config['MONGO_URI'] = "mongodb+srv://markosaris:markosaris@cluster0.rmljq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+app.config['MONGO_URI'] = ""
 
 # SETUP mongoDB
 mongodb_client = PyMongo(app)
