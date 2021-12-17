@@ -21,8 +21,8 @@ app.config['MQTT_KEEPALIVE'] = 50
 app.config['MQTT_TLS_ENABLED'] = False
 
 # MONGODB CONFIG
-app.config['SECRET_KEY'] = "mysecretkey"
-app.config['MONGO_URI'] = ""
+""" app.config['SECRET_KEY'] = "mysecretkey"
+app.config['MONGO_URI'] = "" """
 
 # SETUP mongoDB
 mongodb_client = PyMongo(app)
