@@ -25,8 +25,8 @@ app.config['MQTT_TLS_ENABLED'] = False
 app.config['MONGO_URI'] = "" """
 
 # SETUP mongoDB
-mongodb_client = PyMongo(app)
-db = mongodb_client.db
+""" mongodb_client = PyMongo(app)
+db = mongodb_client.db """
 
 
 # Parameters for SSL enabled
