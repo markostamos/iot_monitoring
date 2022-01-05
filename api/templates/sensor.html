@@ -1,5 +1,5 @@
 {% extends "layout.html" %} {% block content %}
-<h1>{{username}} 's data</h1>
+<h1> {{username}} 's data</h1>
 <p>
     <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
     <span class="dht-labels">Temperature</span>
@@ -24,4 +24,7 @@
         <canvas id="humidity_chart" width="550" height="400"></canvas>
     </div>
 </div>
+<script>
+    var userID
+</script>
 {% endblock %}

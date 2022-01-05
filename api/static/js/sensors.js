@@ -4,6 +4,7 @@ $(document).ready(function() {
     var humidityList = [];
     var timeList = [];
 
+
     //Create empty charts
     var temp_chart = make_chart(id = "temp_chart", title = "Temperature C");
     var humidity_chart = make_chart(id = "humidity_chart", title = "Humidity %");
@@ -60,7 +61,6 @@ $(document).ready(function() {
 
 //Adds data point to chart
 function addData(chart, label, data) {
-    //label = get_hours_mins(label);
     chart.data.labels.push(label);
     chart.data.datasets.forEach((dataset) => {
         dataset.data.push(data);
@@ -68,13 +68,7 @@ function addData(chart, label, data) {
     chart.update();
 }
 
-function get_hours_mins(time) {
-    var date = new Date(parseInt(time));
-    return date.toLocaleTimeString(navigator.language, {
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
+
 
 function removeData(chart) {
     chart.data.labels.pop();
