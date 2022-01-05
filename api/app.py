@@ -63,12 +63,15 @@ def index():
     return render_template('layout.html')
 
 
-@app.route('/sensor')
+@app.route('/sensor/<device_id>/<device_name>')
 @login_required
-def sensor():
+def sensor(device_id,device_name):
+    mqtt.unsubscribe_all()
     mqtt.subscribe('sensors')
-    user = {"username": session["username"]}
-    return render_template('sensor.html', username=session["username"])
+    session["device_id"] = device_id
+    session["device_name"] = device_name
+    
+    return render_template('sensor.html')
 
 
 @app.route('/logout')
@@ -81,10 +84,27 @@ def logout():
 @login_required
 def buildings():
     buildings = list(mongo.db.buildings.find(
-        {'user_id': ObjectId(session['user_id'])}))
+        {'user_id':session['user_id']}))
     return render_template('buildings.html', buildings=buildings)
 
 
+@app.route('/buildings/<id>/<name>/<user_id>')
+@login_required
+def building(id,name,user_id):
+    
+    if user_id != session["user_id"]:
+        return "BADDDDD"
+
+    session["building_id"] = id
+    session["building_name"] = name
+    
+    devices = list(mongo.db.devices.find(
+        {'building_id': session['building_id']}))
+
+    return render_template('devices.html',devices=devices)
+    
+
+    
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -119,7 +139,7 @@ def login():
             if bcrypt.checkpw(request.form['password'].encode('utf-8'), login_user['password']):
                 session['username'] = login_user['username']
                 session['user_id'] = str(login_user.get('_id'))
-                return redirect(url_for('sensor'))
+                return redirect(url_for('buildings'))
             else:
                 return 'Invalid username/password combination'
     return render_template('login.html')

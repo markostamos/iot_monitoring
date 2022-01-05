@@ -1,0 +1,4 @@
+{% extends "layout.html" %} {% block content %} {% for device in devices %}
+<br>
+
+<a href="{{url_for(device['type'],device_id=device['_id'],device_name=device['name'])}}" style="color: #393f81;">{{device["name"]}}</a> {% endfor %} {% endblock %}
