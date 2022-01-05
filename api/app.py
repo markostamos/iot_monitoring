@@ -37,6 +37,7 @@ app.config['MQTT_KEEPALIVE'] = 50
 app.config['MQTT_TLS_ENABLED'] = False
 app.secret_key = "DragonFire"
 app.config["MONGO_URI"] = "mongodb+srv://markosaris:markosaris@cluster0.rmljq.mongodb.net/farmers_buddy_db?retryWrites=true&w=majority"
+
 # MONGODB CONFIG
 
 # Parameters for SSL enabled
@@ -56,6 +57,8 @@ socketio = SocketIO(app)
 
 
 @app.route('/')
+@app.route('/home')
+@login_required
 def index():
     return render_template('layout.html')
 
@@ -64,7 +67,20 @@ def index():
 @login_required
 def sensor():
     mqtt.subscribe('sensors')
+    user = {"username": session["username"]}
     return render_template('sensor.html', username=session["username"])
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+
+@app.route('/buildings')
+@login_required
+def buildings():
+    return render_template('buildings.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -100,6 +116,7 @@ def login():
 
             if bcrypt.checkpw(request.form['password'].encode('utf-8'), login_user['password']):
                 session['username'] = login_user['username']
+                session['user_id'] = str(login_user.get('_id'))
                 return redirect(url_for('sensor'))
             else:
                 return 'Invalid username/password combination'
@@ -121,12 +138,6 @@ def handle_mqtt_message(client, userdata, message):
 
     # print(f'message is {data["payload"]} ')
     socketio.emit('mqtt_message', data=data)
-
-
-""" @mqtt.on_log()
-def handle_logging(client, userdata, level, buf):
-    print(level, buf)
- """
 
 
 @mqtt.on_connect()
