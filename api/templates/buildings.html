@@ -1,4 +1,11 @@
 {% extends "layout.html" %} {% block content %}
 <h1> {{username}} 's data</h1>
 
-{% endblock %}
+
+
+{% for building in buildings %}
+<br>
+<li> {{building["name"]}} </li>
+<a href="{{url_for('buildings/'+building['name'])}}" style="color: #393f81;">{{building["name"]}}</a></p>
+
+{% endfor %} {% endblock %}

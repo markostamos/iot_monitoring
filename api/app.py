@@ -7,7 +7,7 @@ from flask_socketio import SocketIO
 eventlet.monkey_patch()
 from flask_pymongo import PyMongo
 import bcrypt
-
+from bson.objectid import ObjectId
 
 from functools import wraps, update_wrapper
 
@@ -80,7 +80,9 @@ def logout():
 @app.route('/buildings')
 @login_required
 def buildings():
-    return render_template('buildings.html')
+    buildings = list(mongo.db.buildings.find(
+        {'user_id': ObjectId(session['user_id'])}))
+    return render_template('buildings.html', buildings=buildings)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -99,8 +101,8 @@ def register():
                 'email': request.form['email'],
                 'password': hashpass
             })
-            session['username'] = request.form['name']
-            return redirect(url_for('sensor'))
+
+            return redirect(url_for('login'))
 
         return 'That email already exists!'
 
