@@ -1,27 +1,60 @@
-from __main__ import app,mongo
+from __main__ import app, mongo
 from utils.login_required import login_required
-from flask import render_template,session
+from flask import render_template, session, url_for, request, redirect
+
 
 @app.route('/buildings')
 @login_required
 def buildings():
     buildings = list(mongo.db.buildings.find(
-        {'user_id':session['user_id']}))
+        {'user_id': session['user_id']}))
+    """ session["path"] = f'{session["username"]}/' """
+    session["path"] = [session['username']]
     return render_template('buildings.html', buildings=buildings)
 
 
-@app.route('/buildings/<id>/<name>/<user_id>')
+""" 
+@app.route('/buildings/<_id>/<_name>/')
 @login_required
-def building(id,name,user_id):
-    
-    if user_id != session["user_id"]:
-        return "BADDDDD"
+def get_devices(_id, _name):
 
-    session["building_id"] = id
-    session["building_name"] = name
-    
-    devices = list(mongo.db.devices.find(
-        {'building_id': session['building_id']}))
 
-    return render_template('devices.html',devices=devices)
-    
+    return redirect(url_for('building_devices', building=_name.replace(" ", "_")))
+ """
+
+
+@app.route('/buildings/new_building', methods=["POST"])
+@login_required
+def new_building():
+
+    mongo.db.buildings.insert_one({
+        'name': request.form['name'],
+        'location': request.form['location'],
+        'user_id': session['user_id']
+    })
+
+    return redirect(url_for('buildings'))
+
+
+@app.route('/delete_building/<building_name>')
+@login_required
+def delete_building(building_name):
+
+    mongo.db.buildings.delete_one({
+        'name': building_name,
+        'user_id': session["user_id"]
+    })
+
+    newvalues = {"$set": {"building_name": ""}}
+
+    mongo.db.devices.update_many(
+        {
+            'user_id': session['user_id'],
+            'building_name': building_name
+        },
+        {
+            "$set": {"building_name": ""}
+        }
+    )
+
+    return redirect(url_for('buildings'))
