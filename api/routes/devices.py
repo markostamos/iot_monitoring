@@ -14,7 +14,7 @@ def building_devices(building_name):
          }))
     """ session["path"] = f'{session["username"]}/{session["building_name"]}' """
     session["path"] = [session['username'], session["building_name"]]
-    return render_template('devices.html', devices=devices)
+    return render_template('devices.html', devices=devices, buildings=None)
 
 
 @app.route('/new_device', methods=["POST"])
@@ -83,4 +83,4 @@ def all_devices():
     buildings = list(mongo.db.buildings.find(
         {'user_id': session["user_id"]}))
     session["path"] = [session["username"], "Devices"]
-    return render_template('all_devices.html', devices=devices, buildings=buildings)
+    return render_template('devices.html', devices=devices, buildings=buildings)

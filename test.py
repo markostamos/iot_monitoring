@@ -1,4 +1,5 @@
 import paho.mqtt.client as paho
+import paho
 from random import randint
 import CONFIG
 import json
@@ -9,7 +10,7 @@ import datetime
 class Publisher():
     def __init__(self):
 
-        self.client = paho.Client("publisher")
+        self.client = paho.Client("publishersadada", transport="websockets")
 
         self.client.on_publish = self.on_publish
 
@@ -27,7 +28,7 @@ class Publisher():
 if __name__ == "__main__":
     pub = Publisher()
 
-    pub.connect(CONFIG.BROKER, CONFIG.PORT)
+    pub.connect("broker.emqx.io", 1883)
     topic = "sensors"  # works as password
 
     while True:
