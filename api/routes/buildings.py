@@ -36,25 +36,19 @@ def new_building():
     return redirect(url_for('buildings'))
 
 
-@app.route('/delete_building/<building_name>')
+@app.route('/delete_building', methods=["POST"])
 @login_required
-def delete_building(building_name):
+def delete_building():
+    building_name = request.form["building_name"]
 
     mongo.db.buildings.delete_one({
         'name': building_name,
         'user_id': session["user_id"]
     })
 
-    newvalues = {"$set": {"building_name": ""}}
+    mongo.db.devices.delete_many({
+        'building_name': building_name,
+        'user_id': session["user_id"]
+    })
 
-    mongo.db.devices.update_many(
-        {
-            'user_id': session['user_id'],
-            'building_name': building_name
-        },
-        {
-            "$set": {"building_name": ""}
-        }
-    )
-
-    return redirect(url_for('buildings'))
+    return "Success"

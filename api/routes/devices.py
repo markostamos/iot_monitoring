@@ -17,18 +17,21 @@ def building_devices(building_name):
     return render_template('devices.html', devices=devices)
 
 
+@app.route('/new_device', methods=["POST"])
 @app.route('/<building_name>/new_device', methods=["POST"])
 @login_required
-def new_device(building_name):
+def new_device():
     mongo.db.devices.insert_one({
         'name': request.form['name'],
         'type': request.form['type'],
         'password': request.form['password'],
-        'building_name': building_name,
+        'building_name': request.args.get("building_name") if request.args.get("building_name") else request.form["building_name"],
         'user_id': session['user_id']
     })
-
-    return redirect(url_for('building_devices', building_name=building_name))
+    if request.args.get("building_name"):
+        return redirect(url_for('building_devices', building_name=request.args.get("building_name")))
+    else:
+        return redirect(url_for("all_devices"))
 
 
 @app.route('/<building_name>/<device_name>/')
@@ -38,9 +41,9 @@ def sensor(building_name, device_name):
         {'building_name': building_name,
          'user_id': session["user_id"]
          })
-    print(device)
+
     mqtt.unsubscribe_all()
-    mqtt.subscribe('sensors')
+    mqtt.subscribe(device["password"])
 
     return render_template('sensor.html')
 
@@ -60,16 +63,16 @@ def get_device(_name, _type):
         print('TODO')
 
 
-@app.route('/delete_device/<device_name>')
+@app.route('/delete_device', methods=["POST"])
 @login_required
-def delete_device(device_name):
-    print(device_name)
+def delete_device():
+
     mongo.db.devices.delete_one({
-        'name': device_name,
+        'name': request.form["device_name"],
         'user_id': session["user_id"]
     })
 
-    return redirect(url_for('buildings'))
+    return "Success"
 
 
 @app.route('/all_devices')

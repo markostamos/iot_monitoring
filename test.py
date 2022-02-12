@@ -28,7 +28,7 @@ if __name__ == "__main__":
     pub = Publisher()
 
     pub.connect(CONFIG.BROKER, CONFIG.PORT)
-    topic = "sensors"
+    topic = "sensors"  # works as password
 
     while True:
         d = datetime.datetime.utcnow()

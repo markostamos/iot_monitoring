@@ -17,7 +17,7 @@
     {% block navbar %}
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Farmer's Buddy</a>
+        <a class="navbar-brand" href="{{url_for('index')}}">Farmer's Buddy</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -27,15 +27,19 @@
                     <a class="nav-link" href="{{url_for('index')}}">Home</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('notifications')}}">Notifications</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{url_for('buildings')}}">Buildings</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('all_devices')}}">Devices</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
                 </li>
-                
+
             </ul>
         </div>
     </nav>
@@ -43,13 +47,13 @@
 
 
     <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-    {% for path in session["path"] %}
-   
-    <li class="breadcrumb-item">{{path}}</li>
-            
-    {% endfor %}
-    </ol>
+        <ol class="breadcrumb">
+            {% for path in session["path"] %}
+
+            <li class="breadcrumb-item">{{path}}</li>
+
+            {% endfor %}
+        </ol>
     </nav>
 
 

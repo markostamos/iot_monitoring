@@ -1,0 +1,38 @@
+{% extends "layout.html" %} 
+{% block content %}
+
+{% if notifications %}
+    <div class="list-group">
+        {% for noti in notifications %}
+            <div id ="{{noti['_id']}}" class="alert alert-{{noti['type']}} alert-dismissible fade show" role="alert">
+                {{noti["text"]}} - {{noti["date"]}}
+                <button onclick = "delete_notification(this)" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+
+<h3>Nothing to Report !</h3>
+
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function delete_notification(notification){
+    notification_id = $(notification).parent().attr('id');
+
+
+    $.post("/delete_notification", {
+        notification_id: notification_id 
+    });
+
+
+
+}
+
+
+</script>
+{% endblock%}
