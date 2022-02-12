@@ -10,8 +10,8 @@
 
 
 // Replace with your network credentials
-const char* ssid = "Vodafone_2.4G-03633";
-const char* wifi_password = "HKC9SVjr9hVtxDAA";
+const char* ssid = "Lofos Kogebina";
+const char* wifi_password = "ekameoagios";
 
 // Digital pin connected to the DHT sensor
 #define DHTPIN 2
@@ -25,12 +25,12 @@ DHT dht(DHTPIN, DHTTYPE);
 
 
 // MQTT
-const char* mqtt_server = "192.168.2.55";  // IP of the MQTT broker
-const char* humidity_topic = "home/livingroom/humidity";
-const char* temperature_topic = "home/livingroom/temperature";
+const char* mqtt_server = "192.168.1.13";  // IP of the MQTT broker
+const char* humidity_topic = "farm/silo/humidity";
+const char* temperature_topic = "farm/silo/temperature";
 const char* mqtt_username = "aris"; // MQTT username
 const char* mqtt_password = "aris"; // MQTT password
-const char* clientID = "client_livingroom"; // MQTT client ID
+const char* clientID = "client_farm"; // MQTT client ID
 
 // Initialise the WiFi and MQTT Client objects
 WiFiClient wifiClient;

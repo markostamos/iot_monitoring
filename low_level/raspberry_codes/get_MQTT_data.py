@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 
-MQTT_ADDRESS = '192.168.2.55'
+MQTT_ADDRESS = '192.168.1.13'
 MQTT_USER = 'aris'
 MQTT_PASSWORD = 'aris'
 MQTT_TOPIC = 'home/+/+'
@@ -30,3 +30,4 @@ def main():
 if __name__ == '__main__':
     print('MQTT to InfluxDB bridge')
     main()
+
