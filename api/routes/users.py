@@ -22,7 +22,7 @@ def register():
                 request.form['password'].encode('utf-8'), bcrypt.gensalt())
 
             mongo.db.users.insert_one({
-                'username': request.form['name'],
+                'username': request.form['username'],
                 'email': request.form['email'],
                 'password': hashpass
             })

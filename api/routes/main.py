@@ -8,7 +8,7 @@ from bson import ObjectId
 @app.route('/home')
 def index():
     user = session.get('username')
-    return render_template('index.html', user=user)
+    return render_template('index.html')
 
 
 @app.route('/notifications')

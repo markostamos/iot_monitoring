@@ -44,8 +44,8 @@
   </button>
         <div class="collapse navbar-collapse container-fluid" id="navbarNavDropdown">
             <ul class="navbar-nav">
-               
-                {% if user %}
+
+                {% if session.get("username") %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('notifications')}}">Notifications</a>
                 </li>
@@ -58,18 +58,15 @@
                 {% endif %}
             </ul>
 
-            
+
             <div class="text-end">
-                {% if user %}
-                    <a type="button" class="btn btn-outline-light me-2">Hi {{user}} !</a>
-                    <a type="button" href="{{url_for('logout')}}" class="btn btn-warning ">Logout</a> 
-                    
-                {% else %}
+                {% if session.get("username") %}
+                <a type="button" class="btn btn-outline-light me-2">Hi {{session.get("username")}} !</a>
+                <a type="button" href="{{url_for('logout')}}" class="btn btn-warning ">Logout</a> {% else %}
 
-                    <a type="button" href="{{url_for('login')}}" class="btn btn-outline-light me-2">Login</a>
+                <a type="button" href="{{url_for('login')}}" class="btn btn-outline-light me-2">Login</a>
 
-                    <a type="button" href="{{url_for('register')}}" class="btn btn-warning">Sign-up</a>
-                {% endif %}
+                <a type="button" href="{{url_for('register')}}" class="btn btn-warning">Sign-up</a> {% endif %}
             </div>
 
             </ul>
