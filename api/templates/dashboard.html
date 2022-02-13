@@ -40,17 +40,17 @@
                 <ul class="nav flex-column mb-2">
                     {% for building in buildings %} {% if building["name"]==chosen_building %} {%set active="active" %} {%else%} {%set active="" %} {%endif %}
                     <li class="nav-item">
-                        <a  class="nav-link {{active}}" href="{{url_for('dashboard',chosen_building=building['name'])}}">
+                        <a class="nav-link {{active}}" href="{{url_for('dashboard',chosen_building=building['name'])}}">
                              {{building["name"]}} - {{building["location"]}}
                         </a>
-                        
+
                     </li>
                     {% endfor %}
                 </ul>
 
                 {% if chosen_building %}
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <i data-feather="cpu"></i><span>Devices ({{chosen_building}})</span>
+                    <i data-feather="cpu"></i><span>Devices</span>
                     <a class="nav-link" data-bs-toggle="modal" data-bs-target="#create_device_modal" aria-label="Add a new report">
                         <span data-feather="plus-circle"></span>
                     </a>
@@ -61,9 +61,9 @@
                         <a class="nav-link {{active}}" href="{{url_for('dashboard',chosen_building = chosen_building,chosen_device=device['name'])}}">
                              {{device["name"]}} - {{device["type"]}}
                         </a>
-                       
-                       
-                   
+
+
+
                     </li>
                     {% endfor %}
                 </ul>
@@ -84,30 +84,39 @@
                 {% endif %}
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Temperature</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Humidity</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <button type="button" id="get_temp_data" class="btn btn-sm btn-outline-secondary">Temperature</button>
+                        <button type="button" id="get_humidity_data" class="btn btn-sm btn-outline-secondary">Humidity</button>
+
+                        <div>
+                            <button type="button" id="timespan" data-bs-toggle="dropdown" aria-expanded="false" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                             <span data-feather="calendar"></span>
                             This week
-                        </button>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="timespan">
+                                <li><a class="dropdown-item" href="#">Real time</a></li>
+                                <li><a class="dropdown-item" href="#">Last Hour</a></li>
+                                <li><a class="dropdown-item" href="#">Last Day</a></li>
+                                <li><a class="dropdown-item" href="#">Last Week</a></li>
+                                <li><a class="dropdown-item" href="#">All time</a></li>
+                            </ul>
+                        </div>
+
+
+
                     </div>
-                    
-                    
+
+
                     <button type="button" id="delete_device" class="btn btn-outline-danger btn-sm">Delete {{chosen_device}}</button>
                 </div>
             </div>
 
-            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> 
-            {% endif %} 
-            {% if chosen_building and chosen_device %}
+            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> {% endif %} {% if chosen_building and chosen_device %}
             <h2>Notifications for {{chosen_device}} in {{chosen_building}}</h2>
             {% elif chosen_building %}
             <div class="btn-toolbar mb-2 mb-md-0">
                 <button type="button" id="delete_building" class="btn btn-sm btn-outline-danger">Delete {{chosen_building}}</button>
             </div>
-            <span><h2>Notifications for all devices in {{chosen_building}}</h2></span>
-            
-            {%else %}
+            <span><h2>Notifications for all devices in {{chosen_building}}</h2></span> {%else %}
             <h2> All Notifications </h2>
             {% endif%}
             <div class="table-responsive">
@@ -130,7 +139,7 @@
                     </thead>
                     <tbody>
                         {% for notification in notifications%}
-                        <tr id ="{{notification['_id']}}">
+                        <tr id="{{notification['_id']}}">
                             <td>{{loop.index}}</td>
                             <td>{{notification["date"]}}</td>
                             <td>{{notification["severity"]}}</td>
@@ -145,7 +154,7 @@
                                 <button type="button" onclick="delete_notification(this)" class="btn btn-danger btn-sm">X</button>
                             </td>
                         </tr>
-                    {% endfor %}
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -229,7 +238,9 @@
                         </select>
                         </div>
                     </div>
-                 
+
+
+
 
 
             </div>
@@ -246,47 +257,58 @@
 
 {% endblock %} {% block scripts %}
 
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-<script src="{{url_for('static',filename='js/dashboard.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+ -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script src="{{url_for('static',filename='js/dashboard.js')}}" defer></script>
 
 <script>
+    var chosen_device = "{{chosen_device}}";
+    var chosen_building = "{{chosen_building}}";
 
-function delete_notification(notification){
-    notification_id = $(notification).parent().parent().attr('id');
+    function delete_notification(notification) {
+        notification_id = $(notification).parent().parent().attr('id');
 
 
-    $.post("/delete_notification", {
-        notification_id: notification_id 
-    });
+        $.post("/delete_notification", {
+            notification_id: notification_id
+        });
 
-    $("#" + notification_id).remove();
+        $("#" + notification_id).remove();
 
-}
+    }
 
-$("#delete_device").click(()=>{
-    device = "{{chosen_device}}";
-    building = "{{chosen_building}}";
-    $.post('/delete_device', {
+    $("#delete_device").click(() => {
+        device = "{{chosen_device}}";
+        building = "{{chosen_building}}";
+        $.post('/delete_device', {
             device_name: device,
-            building_name:building
-    },(res)=>{
-        window.location.replace("{{url_for('dashboard',chosen_building=chosen_building)}}");
+            building_name: building
+        }, (res) => {
+            window.location.replace("{{url_for('dashboard',chosen_building=chosen_building)}}");
+        });
+
+    })
+
+    $(".dropdown-menu li a").click(function() {
+
+        $("#timespan").text($(this).text());
+        //$(".btn:first-child").val($(this).text());
+
     });
+    $("#delete_building").click(() => {
+        device = "{{chosen_device}}";
+        building = "{{chosen_building}}";
+        $.post('/delete_building', {
+            building_name: building
+        }, (res) => {
+            window.location.replace("{{url_for('dashboard')}}");
+        });
 
-})
-
-$("#delete_building").click(()=>{
-    device = "{{chosen_device}}";
-    building = "{{chosen_building}}";
-    $.post('/delete_building', {
-            building_name:building
-    },(res)=>{
-        window.location.replace("{{url_for('dashboard')}}");
-    });
-
-})
-
-
+    })
 </script>
 {% endblock %}

@@ -15,7 +15,7 @@ def register():
     if request.method == 'POST':
 
         existing_user = mongo.db.users.find_one(
-            {'email': request.form['email']})
+            {'username': request.form['username']})
 
         if existing_user is None:
             hashpass = bcrypt.hashpw(

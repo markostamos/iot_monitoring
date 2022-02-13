@@ -58,3 +58,39 @@ def dashboard():
         }))
 
     return render_template('dashboard.html', buildings=buildings, chosen_building=chosen_building, devices=devices, chosen_device=chosen_device, notifications=notifications)
+
+
+@app.route('/get_temp_data', methods=["POST"])
+def get_temp_data():
+    print(session["username"])
+    print(request.form["device_name"])
+    temps = list(mongo.db.temperatures.find({
+        "username": session["username"],
+        "device_name": request.form["device_name"]
+    }))
+    res = {
+        "values": [],
+        "timestamps": []
+    }
+    for doc in temps:
+        res["values"].append(doc["value"])
+        res["timestamps"].append(int(doc["timestamp"]))
+
+    return res
+
+
+@app.route('/get_humidity_data', methods=["POST"])
+def get_humidity_data():
+    temps = list(mongo.db.humidity.find({
+        "username": session["username"],
+        "device_name": request.form["device_name"]
+    }))
+    res = {
+        "values": [],
+        "timestamps": []
+    }
+    for doc in temps:
+        res["values"].append(doc["value"])
+        res["timestamps"].append(int(doc["timestamp"]))
+
+    return res
