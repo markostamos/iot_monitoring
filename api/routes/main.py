@@ -38,18 +38,18 @@ def dashboard():
         }))
     if chosen_building and chosen_device:
         notifications = list(mongo.db.notifications.find({
-            "user_id": session["user_id"],
+            "username": session["username"],
             "building": chosen_building,
             "device": chosen_device
         }))
     elif chosen_building:
         notifications = list(mongo.db.notifications.find({
-            "user_id": session["user_id"],
+            "username": session["username"],
             "building": chosen_building
         }))
     else:
         notifications = list(mongo.db.notifications.find({
-            "user_id": session["user_id"]
+            "username": session["username"]
         }))
 
     return render_template('dashboard.html', buildings=buildings, chosen_building=chosen_building, devices=devices, chosen_device=chosen_device, notifications=notifications)
