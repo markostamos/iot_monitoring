@@ -8,7 +8,6 @@ from config import Config
 import json
 
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -24,6 +23,7 @@ def handle_publish(json_str):
     data = json.loads(json_str)
     mqtt.publish(data['topic'], data['message']) """
 
+
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
     data = dict(
@@ -34,6 +34,7 @@ def handle_mqtt_message(client, userdata, message):
     # print(f'message is {data["payload"]} ')
     socketio.emit('mqtt_message', data=data)
 
+
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
 
@@ -42,5 +43,5 @@ def handle_connect(client, userdata, flags, rc):
 
 from routes import buildings, devices, main, users
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000,
+    socketio.run(app, port=5000,
                  use_reloader=False, debug=True)

@@ -6,23 +6,9 @@ from bson import ObjectId
 
 @app.route('/')
 @app.route('/home')
-@login_required
 def index():
-    user_id = session["user_id"]
-    username = session["username"]
-    session.clear()
-    session["user_id"] = user_id
-    session["username"] = username
-    session["path"] = [username]
-    return render_template('layout.html')
-
-
-@app.route('/notifications')
-@login_required
-def notifications():
-    notifications = list(mongo.db.notifications.find(
-        {'user_id': session['user_id']}))
-    return render_template('notifications.html', notifications=notifications)
+    user = session.get('username')
+    return render_template('index.html')
 
 
 @app.route('/delete_notification', methods=["POST"])
@@ -39,3 +25,72 @@ def delete_notification():
         "_id": ObjectId(request.form["notification_id"])
     })
     return "success"
+
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    devices = None
+    buildings = list(mongo.db.buildings.find({
+        "user_id": session["user_id"]
+    }))
+    chosen_building = request.args.get("chosen_building")
+    chosen_device = request.args.get("chosen_device")
+    if chosen_building:
+        devices = list(mongo.db.devices.find({
+            "user_id": session["user_id"],
+            "building_name": chosen_building
+        }))
+    if chosen_building and chosen_device:
+        notifications = list(mongo.db.notifications.find({
+            "user_id": session["user_id"],
+            "building": chosen_building,
+            "device": chosen_device
+        }))
+    elif chosen_building:
+        notifications = list(mongo.db.notifications.find({
+            "user_id": session["user_id"],
+            "building": chosen_building
+        }))
+    else:
+        notifications = list(mongo.db.notifications.find({
+            "user_id": session["user_id"]
+        }))
+
+    return render_template('dashboard.html', buildings=buildings, chosen_building=chosen_building, devices=devices, chosen_device=chosen_device, notifications=notifications)
+
+
+@app.route('/get_temp_data', methods=["POST"])
+def get_temp_data():
+    print(session["username"])
+    print(request.form["device_name"])
+    temps = list(mongo.db.temperatures.find({
+        "username": session["username"],
+        "device_name": request.form["device_name"]
+    }))
+    res = {
+        "values": [],
+        "timestamps": []
+    }
+    for doc in temps:
+        res["values"].append(doc["value"])
+        res["timestamps"].append(int(doc["timestamp"]))
+
+    return res
+
+
+@app.route('/get_humidity_data', methods=["POST"])
+def get_humidity_data():
+    temps = list(mongo.db.humidity.find({
+        "username": session["username"],
+        "device_name": request.form["device_name"]
+    }))
+    res = {
+        "values": [],
+        "timestamps": []
+    }
+    for doc in temps:
+        res["values"].append(doc["value"])
+        res["timestamps"].append(int(doc["timestamp"]))
+
+    return res

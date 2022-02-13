@@ -2,48 +2,75 @@
 <html>
 
 <head>
-    <title>Flask-SocketIO Test</title>
+    <title>Farmer's Buddy</title>
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/sensors.css') }}">
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="{{url_for('static',filename='css/headers.css')}}" rel="stylesheet"> {% block styles %} {% endblock %}
 </head>
 
 <body>
     {% block navbar %}
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <a class="navbar-brand" href="{{url_for('index')}}">Farmer's Buddy</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <div class="collapse navbar-collapse container-fluid" id="navbarNavDropdown">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('index')}}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('notifications')}}">Notifications</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('buildings')}}">Buildings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('all_devices')}}">Devices</a>
-                </li>
+
+                {% if session.get("username") %}
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+                    <a class="nav-link" href="{{url_for('dashboard')}}">Dashboard</a>
                 </li>
+
+                {% endif %}
+            </ul>
+
+
+            <div class="text-end">
+                {% if session.get("username") %}
+                <a type="button" class="btn btn-outline-light me-2">Hi {{session.get("username")}} !</a>
+                <a type="button" href="{{url_for('logout')}}" class="btn btn-warning ">Logout</a> {% else %}
+
+                <a type="button" href="{{url_for('login')}}" class="btn btn-outline-light me-2">Login</a>
+
+                <a type="button" href="{{url_for('register')}}" class="btn btn-warning">Sign-up</a> {% endif %}
+            </div>
 
             </ul>
         </div>
     </nav>
-    {% endblock %} {% if session['username'] %}
+    {% endblock %}
+
+    <!-- {% if session['username'] %}
 
 
     <nav aria-label="breadcrumb">
@@ -59,8 +86,14 @@
 
 
 
-    {% endif %}
-    <div class="container">{% block content %}{% endblock %}</div>
+    {% endif %} -->
+    {% block content %}{% endblock %}
+
+
+
+
+
+
 
 
 
