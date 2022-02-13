@@ -1,18 +1,17 @@
 {% extends "layout.html" %} \ {% block content %}
 <button type="button " class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModal ">
   Add a Building
-</button> 
-{% if buildings %}
+</button> {% if buildings %}
 <div class="list-group">
     {% for building in buildings %}
 
-      <div id="{{building['name']}}"> 
+    <div id="{{building['name']}}">
         <br>
         <a href="{{url_for('building_devices',building_name=building['name']) }}" class="list-group-item list-group-item-action">
           {{building["name"]}} - {{building["location"]}}</a>
         <br>
-        <button type="button" class="btn btn-danger btn-sm" onclick="delete_building(this)">Delete</button> 
-      </div>
+        <button type="button" class="btn btn-danger btn-sm" onclick="delete_building(this)">Delete</button>
+    </div>
     {% endfor %}
 </div>
 {% else %}
@@ -20,9 +19,6 @@
 {% endif %}
 
 <!-- Button trigger modal -->
-
-
-
 
 
 <!-- Modal -->

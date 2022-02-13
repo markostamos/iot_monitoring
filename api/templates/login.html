@@ -1,52 +1,57 @@
-{% extends "layout.html" %} {% block navbar %} {% endblock %} {% block content %}
+{% extends "layout.html" %} 
+{% block navbar %} 
+{% endblock %} 
 
-<section class="vh-100" style="background-color: #9A616D;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-xl-10">
-                <div class="card" style="border-radius: 1rem;">
-                    <div class="row g-0">
-                        <div class="col-md-6 col-lg-5 d-none d-md-block">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp" alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
-                        </div>
-                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
-                            <div class="card-body p-4 p-lg-5 text-black">
+{% block styles%}
 
-                                <form method="POST" action="{{url_for('login')}}">
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+    
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+</style>
 
-                                    <div class="d-flex align-items-center mb-3 pb-1">
-                                        <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
-                                        <span class="h1 fw-bold mb-0">Logo</span>
-                                    </div>
+<!-- Custom styles for this template -->
+<link href="{{url_for('static',filename='/css/signin.css')}}" rel="stylesheet">
 
-                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
-
-                                    <div class="form-outline mb-4">
-                                        <input type="email" name="email" id="form2Example17" class="form-control form-control-lg" />
-                                        <label class="form-label" for="form2Example17">Email address</label>
-                                    </div>
-
-                                    <div class="form-outline mb-4">
-                                        <input type="password" name="password" id="form2Example27" class="form-control form-control-lg" />
-                                        <label class="form-label" for="form2Example27">Password</label>
-                                    </div>
-
-                                    <div class="pt-1 mb-4">
-                                        <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
-                                    </div>
+{% endblock %}
 
 
-                                    <a href="{{url_for('register')}}" style="color: #393f81;">Register here</a></p>
-                                    <a href="#!" class="small text-muted">Terms of use.</a>
-                                    <a href="#!" class="small text-muted">Privacy policy</a>
-                                </form>
+{% block content %}
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="container text-center">
+
+    <main class="form-signin">
+        <form method="POST" action="{{url_for('login')}}">
+            <img class=" mb-4 " src="{{url_for('static',filename='img/logo.svg')}}" alt=" " width="72 " height="57 ">
+            <h1 class="h3 mb-3 fw-normal ">Please sign in</h1>
+
+            <div class="form-floating ">
+                <input type="email" name="email" class="form-control " id="floatingInput " placeholder="name@example.com ">
+                <label for="floatingInput ">Email address</label>
             </div>
-        </div>
-    </div>
-</section>
+            <div class="form-floating ">
+                <input type="password" name="password" class="form-control " id="floatingPassword " placeholder="Password ">
+                <label for="floatingPassword ">Password</label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary " type="submit ">Sign in</button>
+            <p class="mt-5 mb-3 text-muted ">&copy; 2021–2022</p>
+            <a href="{{url_for('register')}}" style="color: #393f81;">Register here</a></p>
+        </form>
+    </main>
+
+</div>
+
+
+
 {% endblock %}

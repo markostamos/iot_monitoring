@@ -1,13 +1,14 @@
 
-from __main__ import app,mongo
-from flask import session,url_for,redirect,render_template,request  
+from __main__ import app, mongo
+from flask import session, url_for, redirect, render_template, request
 import bcrypt
 
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -29,8 +30,11 @@ def register():
             return redirect(url_for('login'))
 
         return 'That email already exists!'
-
-    return render_template('register.html')
+    else:
+        if session.get("username"):
+            return redirect(url_for('index'))
+        else:
+            return render_template('register.html')
 
 
 @app.route('/login', methods=["POST", "GET"])
@@ -43,8 +47,11 @@ def login():
             if bcrypt.checkpw(request.form['password'].encode('utf-8'), login_user['password']):
                 session['username'] = login_user['username']
                 session['user_id'] = str(login_user.get('_id'))
-                return redirect(url_for('buildings'))
+                return redirect(url_for('index'))
             else:
                 return 'Invalid username/password combination'
-    return render_template('login.html')
-
+    else:
+        if session.get("username"):
+            return redirect(url_for('index'))
+        else:
+            return render_template('login.html')

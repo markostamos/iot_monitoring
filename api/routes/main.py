@@ -6,15 +6,9 @@ from bson import ObjectId
 
 @app.route('/')
 @app.route('/home')
-@login_required
 def index():
-    user_id = session["user_id"]
-    username = session["username"]
-    session.clear()
-    session["user_id"] = user_id
-    session["username"] = username
-    session["path"] = [username]
-    return render_template('layout.html')
+    user = session.get('username')
+    return render_template('index.html', user=user)
 
 
 @app.route('/notifications')

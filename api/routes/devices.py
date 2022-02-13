@@ -24,7 +24,6 @@ def new_device():
     mongo.db.devices.insert_one({
         'name': request.form['name'],
         'type': request.form['type'],
-        'password': request.form['password'],
         'building_name': request.args.get("building_name") if request.args.get("building_name") else request.form["building_name"],
         'user_id': session['user_id']
     })
@@ -42,22 +41,23 @@ def sensor(building_name, device_name):
          'user_id': session["user_id"]
          })
 
-    mqtt.unsubscribe_all()
-    mqtt.subscribe(device["password"])
+    """ mqtt.unsubscribe_all()
+    mqtt.subscribe(device["password"]) """
 
     return render_template('sensor.html')
 
 
-@app.route('/device/<_name>/<_type>')
+@app.route('/device/<_name>/<_type>/<building>')
 @login_required
-def get_device(_name, _type):
+def get_device(_name, _type, building):
 
     session["device_name"] = _name
+    session["building_name"] = building
     """ session["path"] = f'{session["username"]}/{session["building_name"]}/{session["device_name"]}' """
     session["path"] = [session['username'],
                        session["building_name"], session["device_name"]]
     if _type == "sensor":
-        return redirect(url_for('sensor', building_name=session["building_name"], device_name=session["device_name"]))
+        return redirect(url_for('sensor', building_name=building, device_name=session["device_name"]))
 
     else:
         print('TODO')
