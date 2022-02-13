@@ -62,12 +62,16 @@ def dashboard():
 
 @app.route('/get_temp_data', methods=["POST"])
 def get_temp_data():
-    print(session["username"])
-    print(request.form["device_name"])
+
     temps = list(mongo.db.temperatures.find({
         "username": session["username"],
-        "device_name": request.form["device_name"]
+        "device_name": request.form["device_name"],
+        "timestamp": {
+            "$gt": request.form.get('lower_bound', type=int),
+            "$lt": request.form.get('upper_bound', type=int)
+        }
     }))
+
     res = {
         "values": [],
         "timestamps": []
@@ -83,7 +87,11 @@ def get_temp_data():
 def get_humidity_data():
     temps = list(mongo.db.humidity.find({
         "username": session["username"],
-        "device_name": request.form["device_name"]
+        "device_name": request.form["device_name"],
+        "timestamp": {
+            "$gt": request.form.get('lower_bound', type=int),
+            "$lt": request.form.get('upper_bound', type=int)
+        }
     }))
     res = {
         "values": [],

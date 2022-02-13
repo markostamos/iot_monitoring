@@ -1,7 +1,6 @@
 /* globals Chart:false, feather:false */
 
 
-
 $(document).ready(function() {
 
     feather.replace({ 'aria-hidden': 'true' })
@@ -10,81 +9,103 @@ $(document).ready(function() {
 
     //Create empty charts
     var mychart = make_chart(id = "myChart", title = "");
-    /* var humidity_chart = make_chart(id = "humidity_chart", title = "Humidity %"); */
 
-    var chart_type = "realtime";
+
+    var real_time = false;
+    var active = "temp";
 
 
     $("#get_temp_data").click(() => {
+        [lower_bound, upper_bound] = get_upper_lower_bound();
+        active = "temp";
+        real_time = false;
 
+        $("#real_time").removeClass('active');
         $.post('/get_temp_data', {
             username: "{{session['username']}}",
-            device_name: chosen_device
+            device_name: chosen_device,
+            upper_bound: parseInt(upper_bound),
+            lower_bound: parseInt(lower_bound)
         }, (res) => {
             mychart.options.plugins.title.text = "Temperature (C)";
             draw_data(mychart, res["timestamps"], res["values"]);
 
         })
 
+    });
 
-        //draw_data(mychart, [1644765567000, 1644766567000, 1644785567000], [1, 2, 3])
-
-    })
     $("#get_humidity_data").click(() => {
 
+        [lower_bound, upper_bound] = get_upper_lower_bound();
+        real_time = false;
+        $("#real_time").removeClass('active');
+        active = "humidity";
         $.post('/get_humidity_data', {
             username: "{{session['username']}}",
-            device_name: chosen_device
+            device_name: chosen_device,
+            upper_bound: parseInt(upper_bound),
+            lower_bound: parseInt(lower_bound)
         }, (res) => {
             mychart.options.plugins.title.text = "Humidity (%)";
             draw_data(mychart, res["timestamps"], res["values"]);
 
         });
-
-
-
     })
 
-    /* 
-        //Connect via socket with sever
-        var socket = io();
-        socket.on('connect', function() {
-            socket.emit('my_event', {
-                data: 'I\'m connected!'
+    $("#real_time").click(() => {
+        $("#real_time").button('toggle');
+        real_time = !real_time;
+        lower_bound = new Date();
+    })
+
+    setInterval(get_real_time_data = () => {
+        if (real_time) {
+
+            console.log(new Date().getTime());
+            $.post('/get_' + active + '_data', {
+                username: "{{session['username']}}",
+                device_name: chosen_device,
+                upper_bound: parseInt(new Date().getTime()),
+                lower_bound: parseInt(lower_bound.getTime())
+            }, (res) => {
+                draw_data(mychart, res["timestamps"], res["values"]);
+
             });
-            console.log("connected!")
-        });
-
-        //On every new mqtt message update values and charts
-        socket.on("mqtt_message", function(msg, cb) {
-            var a = 3;
-            var temp = msg["payload"]["temperature"];
-            var humidity = msg["payload"]["humidity"];
-            var time = msg["payload"]["timestamp"];
-
-            //Update values
-            $("#temperature").text(temp);
-            $("#humidity").text(humidity);
-
-            tempList.push(temp);
-            humidityList.push(humidity);
-            timeList.push(time);
-            if (chart_type == "realtime") {
-                addData(temp_chart, time, temp);
-                addData(humidity_chart, time, humidity);
-            }
-
-            if (cb)
-                cb();
-        }); */
-
+        }
+    }, 1000);
 
 });
 
 
 
+function get_upper_lower_bound() {
+    var value = $("#timespan").text().trim();
+    var now = new Date();
+    lower_bound = new Date();
+    if (value == "Last Hour") {
+
+        lower_bound.setHours(now.getHours() - 1);
+
+    } else if (value == "Last Day") {
+
+        lower_bound.setHours(now.getHours() - 24);
 
 
+    } else if (value == "Last Week") {
+
+        lower_bound.setHours(now.getHours() - 24 * 7);
+
+    } else if (value == "All time") {
+        lower_bound = 0;
+
+    } else if (value == "Real Time") {
+        lower_bound = 0;
+
+    }
+    upper_bound = now;
+
+    return [lower_bound.getTime(), upper_bound.getTime()];
+}
 
 function draw_data(chart, timestamps, values) {
     chart.data.labels = timestamps;
