@@ -26,8 +26,8 @@ DHT dht(DHTPIN, DHTTYPE);
 
 // MQTT
 const char* mqtt_server = "192.168.1.13";  // IP of the MQTT broker
-const char* humidity_topic = "farm/silo/humidity";
-const char* temperature_topic = "farm/silo/temperature";
+const char* humidity_topic = "farm/humidity";
+const char* temperature_topic = "farm/temperatures";
 const char* mqtt_username = "aris"; // MQTT username
 const char* mqtt_password = "aris"; // MQTT password
 const char* clientID = "client_farm"; // MQTT client ID
