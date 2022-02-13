@@ -76,7 +76,7 @@
             {% if chosen_building and chosen_device %}
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 {% if chosen_building and chosen_device %}
-                <h1 class="h2">{{chosen_building}}/{{chosen_device}}</h1>
+                <h1 class="h3">{{chosen_building}}/{{chosen_device}}</h1>
                 {%elif chosen_building %}
                 <h1 class="h2">{{chosen_building}}</h1>
                 {%else%}
@@ -84,8 +84,8 @@
                 {% endif %}
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <button type="button" id="get_temp_data" class="btn btn-sm btn-outline-secondary">Temperature</button>
-                        <button type="button" id="get_humidity_data" class="btn btn-sm btn-outline-secondary">Humidity</button>
+                        <button type="button" id="get_temp_data" class="btn btn-sm btn-outline-secondary"><span data-feather="thermometer"></span>Temperature</button>
+                        <button type="button" id="get_humidity_data" class="btn btn-sm btn-outline-secondary"><span data-feather="droplet"></span>Humidity</button>
 
                         <div>
                             <button type="button" id="timespan" data-bs-toggle="dropdown" aria-expanded="false" class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -100,7 +100,7 @@
                             </ul>
                         </div>
 
-                        <button type="button" id="real_time" class="btn btn-outline-success btn-sm"> Real Time</button>
+                        <button type="button" id="real_time" class="btn btn-outline-success btn-sm"><span data-feather="activity"></span> Real Time</button>
 
                     </div>
 
@@ -110,13 +110,15 @@
             </div>
 
             <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> {% endif %} {% if chosen_building and chosen_device %}
-            <h2>Notifications for {{chosen_device}} in {{chosen_building}}</h2>
+            <h3>Notifications for {{chosen_device}} in {{chosen_building}}</h3>
             {% elif chosen_building %}
+
+            <h3> Notifications for all devices in {{chosen_building}}</h3>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <button type="button" id="delete_building" class="btn btn-sm btn-outline-danger">Delete {{chosen_building}}</button>
             </div>
-            <span><h2>Notifications for all devices in {{chosen_building}}</h2></span> {%else %}
-            <h2> All Notifications </h2>
+            {%else %}
+            <h3> All Notifications </h3>
             {% endif%}
             <div class="table-responsive">
                 <table class="table table-striped table-sm">

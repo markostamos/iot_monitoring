@@ -7,18 +7,13 @@ from bson import ObjectId
 @app.route('/')
 @app.route('/home')
 def index():
-    user = session.get('username')
+
     return render_template('index.html')
 
 
 @app.route('/delete_notification', methods=["POST"])
 @login_required
 def delete_notification():
-    """  mongo.db.notifications.delete_one({
-         "user_id": session["user_id"],
-         "_id": request.
-     }) """
-    print(request.form["notification_id"])
 
     mongo.db.notifications.delete_one({
         "user_id": session["user_id"],
