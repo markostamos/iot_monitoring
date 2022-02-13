@@ -47,7 +47,7 @@ def on_message(client, userdata, msg):
     else :
         collection=db.devices
     
-    post={"timestamp":timestamp,"value":message,"username":"Aris","device_name":"ESP+DHT"}
+    post={"timestamp":timestamp,"value":message,"username":"Aris","device_name":"gisdakis"}
     collection.insert_one(post)
 
 def main():
