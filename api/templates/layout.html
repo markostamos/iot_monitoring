@@ -46,15 +46,11 @@
             <ul class="navbar-nav">
 
                 {% if session.get("username") %}
+
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('notifications')}}">Notifications</a>
+                    <a class="nav-link" href="{{url_for('dashboard')}}">Dashboard</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('buildings')}}">Buildings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('all_devices')}}">Devices</a>
-                </li>
+
                 {% endif %}
             </ul>
 
@@ -92,6 +88,7 @@
 
     {% endif %} -->
     {% block content %}{% endblock %}
+
 
 
 
