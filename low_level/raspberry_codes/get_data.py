@@ -24,8 +24,8 @@ MQTT_PASSWORD = 'aris'
 MQTT_TOPIC = 'farm/+/+'
 
 mongoClient=MongoClient("mongodb+srv://markosaris:markosaris@cluster0.rmljq.mongodb.net/farmers_buddy_db?retryWrites=true&w=majority")
-db=mongoClient.CropData
-collection=db.farm_data
+db=mongoClient.farmers_buddy_db
+collection=db.devices
 
 
 def on_connect(client, userdata, flags, rc):
@@ -37,10 +37,10 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
     message=msg.payload.decode("utf-8")
+    timestamp = int(time.mktime(d.timetuple())) * 1000
     print(msg.topic + ' ' + str(msg.payload))
-    post={"time":datetime.datetime.now(),"topic":msg.topic,"value":message}
+    post={"time":timestamp,"topic":msg.topic,"value":message}
     collection.insert_one(post)
-
 
 def main():
     mqtt_client = mqtt.Client()
