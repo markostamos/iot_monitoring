@@ -16,9 +16,33 @@ def index():
 def delete_notification():
 
     mongo.db.notifications.delete_one({
-        "user_id": session["user_id"],
+        "username": session["username"],
         "_id": ObjectId(request.form["notification_id"])
     })
+    return "success"
+
+
+@app.route('/delete_notifications', methods=["POST"])
+@login_required
+def delete_notifications():
+
+    if request.form["device"] == "None" and request.form["building"] == "None":
+        mongo.db.notifications.delete_many({
+            'username': session["username"]
+        })
+    elif request.form["device"] == "None":
+        mongo.db.notifications.delete_many({
+            'username': session["username"],
+            'building': request.form["building"]
+        })
+    else:
+        mongo.db.notifications.delete_many({
+            'username': session["username"],
+            'building': request.form["building"],
+            'device': request.form["device"]
+        })
+
+    print(request.form["building"])
     return "success"
 
 

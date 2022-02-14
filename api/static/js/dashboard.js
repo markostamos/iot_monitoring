@@ -58,7 +58,15 @@ $(document).ready(function() {
 
         });
     })
+    $("#delete_notifications").click(() => {
+        $.post('/delete_notifications', {
+            device: chosen_device,
+            building: chosen_building
+        }, (res) => {
+            $("#notification_body").empty();
+        })
 
+    });
     $(".dropdown-menu li a").click(function() {
 
         $("#timespan").text($(this).text());
