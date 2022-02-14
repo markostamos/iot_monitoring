@@ -20,7 +20,8 @@ def new_device():
 @app.route('/delete_device', methods=["POST"])
 @login_required
 def delete_device():
-
+    print(session["username"])
+    print(request.form["device_name"])
     mongo.db.devices.delete_one({
         'name': request.form["device_name"],
         'building_name': request.form["building_name"],
@@ -28,7 +29,7 @@ def delete_device():
     })
     mongo.db.notifications.delete_many({
         'device': request.form["device_name"],
-        'user_id': session["user_id"]
+        'username': session["username"]
     })
     mongo.db.temperatures.delete_many({
         'username': session["username"],
