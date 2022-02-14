@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> {% endif %} {% if chosen_building and chosen_device %}
+            <canvas id="myChart" width="1500" height="600"></canvas> {% endif %} {% if chosen_building and chosen_device %}
             <h3>Notifications for {{chosen_device}} in {{chosen_building}}</h3>
             {% elif chosen_building %}
 
@@ -170,7 +170,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel ">Add a new building</h5>
+                <h5 class="modal-title" id="exampleModalLabel ">Add a new Building</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body ">
@@ -205,7 +205,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel ">Add a new device</h5>
+                <h5 class="modal-title" id="exampleModalLabel ">Add a new Device</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body ">
@@ -218,12 +218,12 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="type" class=col-sm-2 col-form-label>type</label>
+                        <label for="type" class=col-sm-2 col-form-label>Type</label>
                         <div class="col-sm-10">
                             <select class="form-control" id="type" name="type">
                             
-                            <option>sensor</option>
-                            <option>trap</option>
+                            <option>Sensor</option>
+                            <option>Trap</option>
                             
                         </select>
                         </div>
@@ -259,9 +259,6 @@
 {% endblock %} {% block scripts %}
 
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
- -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
