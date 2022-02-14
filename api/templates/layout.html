@@ -57,7 +57,7 @@
 
             <div class="text-end">
                 {% if session.get("username") %}
-                <a type="button" class="btn btn-outline-light me-2">Hi {{session.get("username")}} !</a>
+                <a type="button" class="btn btn-outline-light me-2">{{session.get("username")}}</a>
                 <a type="button" href="{{url_for('logout')}}" class="btn btn-warning ">Logout</a> {% else %}
 
                 <a type="button" href="{{url_for('login')}}" class="btn btn-outline-light me-2">Login</a>

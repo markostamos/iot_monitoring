@@ -31,8 +31,12 @@
             <div class="container">
                 <div class="carousel-caption text-start">
                     <h1>Farmer's Buddy</h1>
-                    <p>An IoT solution for grain storage management.</p>
-                    <p><a class="btn btn-lg btn-warning" href="{{url_for('register')}}">Sign up today</a></p>
+                    {% if session["username"] %}
+                    <p>Hi {{session["username"]}}! Click here to open your </p>
+                    <p><a class="btn btn-lg btn-warning" href="{{url_for('dashboard')}}">Dashboard</a></p>
+                    {% else %}
+                    <span>An IoT solution for grain storage management.</span>
+                    <a class="btn btn-lg btn-warning" href="{{url_for('register')}}">Sign up today</a> {% endif %}
                 </div>
             </div>
         </div>
