@@ -64,12 +64,16 @@ $(document).ready(function() {
         $("#timespan").text($(this).text());
         real_time = false;
         $("#real_time").removeClass('active');
+        [lower_bound, upper_bound] = get_upper_lower_bound();
         $.post('/get_' + active + '_data', {
             username: "{{session['username']}}",
             device_name: chosen_device,
             upper_bound: parseInt(upper_bound),
             lower_bound: parseInt(lower_bound)
         }, (res) => {
+            console.log(res);
+            console.log(upper_bound);
+            console.log(lower_bound);
             mychart.options.plugins.title.text = active == "temp" ? "Temperature (C)" : "Humidity (%)"
             draw_data(mychart, res["timestamps"], res["values"]);
 
@@ -140,6 +144,9 @@ function get_upper_lower_bound() {
 
     } else if (value == "All time") {
         return [0, now.getTime()];
+
+    } else if (value == "Last Minute") {
+        lower_bound.setMinutes(now.getMinutes() - 1);
 
     }
     upper_bound = now;
