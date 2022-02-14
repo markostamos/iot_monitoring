@@ -27,6 +27,7 @@ MQTT_TOPIC = 'farm/+'
 mongoClient=MongoClient("mongodb+srv://markosaris:markosaris@cluster0.rmljq.mongodb.net/farmers_buddy_db?retryWrites=true&w=majority")
 db=mongoClient.farmers_buddy_db
 collection=db.devices
+notifications=db.notifications
 
 
 def on_connect(client, userdata, flags, rc):
@@ -47,6 +48,20 @@ def on_message(client, userdata, msg):
     else :
         collection=db.devices
     
+    if (message == "nan"):
+        notification={"username":"Aris","building":"Silo","device":"gisdakis","text":"The sensor did not read any data","date":datetime.datetime.now(),"severity":"low"}
+        notifications.insert_one(notification)
+    
+    
+    if (message > 30)&(msg.topic == "farm/temperatures"):
+        notification={"username":"Aris","building":"Silo","device":"gisdakis","text":"High temperatures","date":datetime.datetime.now(),"severity":"high"}
+        notifications.insert_one(notification)
+
+    if (message > 70)&(msg.topic == "farm/humidity"):
+        notification={"username":"Aris","building":"Silo","device":"gisdakis","text":"High humidity","date":datetime.datetime.now(),"severity":"medium"}
+        notifications.insert_one(notification)
+
+
     post={"timestamp":timestamp,"value":message,"username":"Aris","device_name":"gisdakis"}
     collection.insert_one(post)
 
