@@ -123,10 +123,77 @@ $(document).ready(function() {
                 upper_bound: parseInt(new Date().getTime()),
                 lower_bound: parseInt(lower_bound.getTime())
             }, (res) => {
-                draw_data(mychart, res["timestamps"], res["values"]);
+                for (i = 0; i < res["timestamps"].length; i++) {
+                    console.log("works");
+                    console.log(res["values"][i]);
+                    addData(mychart, res["timestamps"][i], res["values"][i]);
+                }
 
             });
+            lower_bound = new Date();
         }
+
+        $.post('/get_notifications', {
+            username: "{{session['username']}}",
+            device: chosen_device,
+            building: chosen_building
+        }, (res) => {
+            if (chosen_device == "None" && chosen_building == "None") {
+                console.log("none");
+
+                for (i = 0; i < res.notifications.length; i++) {
+                    notification = res.notifications[i];
+
+                    $("#notification_body").append(
+                        `<tr id="${notification["id"]}">
+                    <td class="text-center">${notification["date"]}</td>
+                    <td class="text-center">${notification["severity"]}</td>
+                    <td class="text-center">${notification["building"]}</td>
+                    <td class="text-center">${notification["device"]}</td>
+                    <td class="text-center">${notification["text"]}</td>
+                    <td class="text-center">
+                    <button type="button" onclick="delete_notification(this)" class="btn btn-danger btn-sm">X</button>
+                    </td>
+                    </tr>`
+                    )
+                }
+            } else if (chosen_device == "None") {
+                for (i = 0; i < res.notifications.length; i++) {
+                    notification = res.notifications[i];
+
+                    $("#notification_body").append(
+                        `<tr id="${notification["id"]}">
+                    <td class="text-center">${notification["date"]}</td>
+                    <td class="text-center">${notification["severity"]}</td>
+                    <td class="text-center">${notification["device"]}</td>
+                    <td class="text-center">${notification["text"]}</td>
+                    <td class="text-center">
+                    <button type="button" onclick="delete_notification(this)" class="btn btn-danger btn-sm">X</button>
+                    </td>
+                    </tr>`
+                    )
+                }
+            } else {
+                for (i = 0; i < res.notifications.length; i++) {
+                    notification = res.notifications[i];
+
+                    $("#notification_body").append(
+                        `<tr id="${notification["id"]}">
+                    <td class="text-center">${notification["date"]}</td>
+                    <td class="text-center">${notification["severity"]}</td>
+                    <td class="text-center">${notification["text"]}</td>
+                    <td class="text-center">
+                    <button type="button" onclick="delete_notification(this)" class="btn btn-danger btn-sm">X</button>
+                    </td>
+                    </tr>`
+                    )
+                }
+            }
+
+
+        })
+
+
     }, 1000);
 
 });
@@ -177,9 +244,8 @@ function draw_data(chart, timestamps, values) {
 //Adds data point to chart
 function addData(chart, label, data) {
     chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-    });
+
+    chart.data.datasets[0].data.push(data);
     chart.update();
 }
 

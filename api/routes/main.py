@@ -46,6 +46,42 @@ def delete_notifications():
     return "success"
 
 
+@app.route('/get_notifications', methods=["POST"])
+@login_required
+def get_notifications():
+
+    if request.form["device"] == "None" and request.form["building"] == "None":
+        notifications = list(mongo.db.notifications.find({
+            'username': session["username"]
+        }))
+    elif request.form["device"] == "None":
+        notifications = list(mongo.db.notifications.find({
+            'username': session["username"],
+            'building': request.form["building"]
+        }))
+    else:
+        notifications = list(mongo.db.notifications.find({
+            'username': session["username"],
+            'building': request.form["building"],
+            'device': request.form["device"]
+        }))
+
+    res = {
+        "notifications": []
+    }
+    for notification in notifications:
+        res["notifications"].append({
+            "_id": str(notification["_id"]),
+            "text": notification["text"],
+            "date": str(notification["date"]),
+            "building": notification["building"],
+            "severity": notification["severity"],
+            "device": notification["device"]
+
+        })
+    return res
+
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
