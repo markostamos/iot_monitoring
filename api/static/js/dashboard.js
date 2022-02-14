@@ -96,10 +96,7 @@ function get_upper_lower_bound() {
         lower_bound.setHours(now.getHours() - 24 * 7);
 
     } else if (value == "All time") {
-        lower_bound = 0;
-
-    } else if (value == "Real Time") {
-        lower_bound = 0;
+        return [0, now.getTime()];
 
     }
     upper_bound = now;
