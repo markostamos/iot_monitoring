@@ -101,11 +101,12 @@
                         </div>
 
                         <button type="button" id="real_time" class="btn btn-outline-success btn-sm"><span data-feather="activity"></span> Real Time</button>
-
+                        <button type="button" id="delete_data" class="btn btn-outline-dark btn-sm">Delete Data</button>
                     </div>
 
 
-                    <button type="button" id="delete_device" class="btn btn-outline-danger btn-sm">Delete {{chosen_device}}</button>
+                    <button type="button" id="delete_device" class="btn btn-outline-danger btn-sm">Delete Device</button>
+
                 </div>
             </div>
 
@@ -292,12 +293,7 @@
 
     })
 
-    $(".dropdown-menu li a").click(function() {
 
-        $("#timespan").text($(this).text());
-        //$(".btn:first-child").val($(this).text());
-
-    });
     $("#delete_building").click(() => {
         device = "{{chosen_device}}";
         building = "{{chosen_building}}";

@@ -97,3 +97,48 @@ def get_humidity_data():
         res["timestamps"].append(int(doc["timestamp"]))
 
     return res
+
+
+@app.route('/delete_data', methods=["POST"])
+@login_required
+def delete_data():
+    if request.form["type"] == "ALL":
+        mongo.db.temperatures.delete_many({
+            "username": session["username"],
+            "device_name": request.form["device_name"],
+            "timestamp": {
+                "$gt": request.form.get('lower_bound', type=int),
+                "$lt": request.form.get('upper_bound', type=int)
+            }
+        })
+        mongo.db.humidity.delete_many({
+            "username": session["username"],
+            "device_name": request.form["device_name"],
+            "timestamp": {
+                "$gt": request.form.get('lower_bound', type=int),
+                "$lt": request.form.get('upper_bound', type=int)
+            }
+        })
+
+        return "success"
+    elif request.form["type"] == "temp":
+        mongo.db.temperatures.delete_many({
+            "username": session["username"],
+            "device_name": request.form["device_name"],
+            "timestamp": {
+                "$gt": request.form.get('lower_bound', type=int),
+                "$lt": request.form.get('upper_bound', type=int)
+            }
+        })
+        return "success"
+    elif request.form["type"] == "humidity":
+        mongo.db.humidity.delete_many({
+            "username": session["username"],
+            "device_name": request.form["device_name"],
+            "timestamp": {
+                "$gt": request.form.get('lower_bound', type=int),
+                "$lt": request.form.get('upper_bound', type=int)
+            }
+        })
+        return "sucess"
+    return "bad"

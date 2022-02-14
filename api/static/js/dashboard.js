@@ -6,20 +6,22 @@ $(document).ready(function() {
     feather.replace({ 'aria-hidden': 'true' })
 
 
-
+    lower_bound = 0;
+    upper_bound = Infinity;
     //Create empty charts
     var mychart = make_chart(id = "myChart", title = "");
 
 
     var real_time = false;
-    var active = "temp";
+    var active = null;
 
 
     $("#get_temp_data").click(() => {
         [lower_bound, upper_bound] = get_upper_lower_bound();
         active = "temp";
         real_time = false;
-
+        $("#get_temp_data").addClass('active');
+        $("#get_humidity_data").removeClass('active');
         $("#real_time").removeClass('active');
         $.post('/get_temp_data', {
             username: "{{session['username']}}",
@@ -37,9 +39,14 @@ $(document).ready(function() {
     $("#get_humidity_data").click(() => {
 
         [lower_bound, upper_bound] = get_upper_lower_bound();
+
         real_time = false;
-        $("#real_time").removeClass('active');
         active = "humidity";
+        $("#real_time").removeClass('active');
+
+        $("#get_humidity_data").addClass('active');
+        $("#get_temp_data").removeClass('active');
+
         $.post('/get_humidity_data', {
             username: "{{session['username']}}",
             device_name: chosen_device,
@@ -50,6 +57,42 @@ $(document).ready(function() {
             draw_data(mychart, res["timestamps"], res["values"]);
 
         });
+    })
+
+    $(".dropdown-menu li a").click(function() {
+
+        $("#timespan").text($(this).text());
+        real_time = false;
+        $("#real_time").removeClass('active');
+        $.post('/get_' + active + '_data', {
+            username: "{{session['username']}}",
+            device_name: chosen_device,
+            upper_bound: parseInt(upper_bound),
+            lower_bound: parseInt(lower_bound)
+        }, (res) => {
+            mychart.options.plugins.title.text = active == "temp" ? "Temperature (C)" : "Humidity (%)"
+            draw_data(mychart, res["timestamps"], res["values"]);
+
+        });
+
+
+
+    });
+
+    $("#delete_data").click(() => {
+
+        $.post('/delete_data', {
+            username: "{{session['username']}}",
+            device_name: chosen_device,
+            upper_bound: parseInt(upper_bound),
+            lower_bound: parseInt(lower_bound),
+            type: active ? active : "ALL"
+
+        }, (res) => {
+            console.log(res);
+            draw_data(mychart, [], []);
+        });
+
     })
 
     $("#real_time").click(() => {

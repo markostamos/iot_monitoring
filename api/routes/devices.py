@@ -20,8 +20,7 @@ def new_device():
 @app.route('/delete_device', methods=["POST"])
 @login_required
 def delete_device():
-    print(session["username"])
-    print(request.form["device_name"])
+
     mongo.db.devices.delete_one({
         'name': request.form["device_name"],
         'building_name': request.form["building_name"],
