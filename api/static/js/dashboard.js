@@ -138,6 +138,7 @@ $(document).ready(function() {
             device: chosen_device,
             building: chosen_building
         }, (res) => {
+            $("#notification_body").empty();
             if (chosen_device == "None" && chosen_building == "None") {
                 console.log("none");
 
@@ -194,7 +195,7 @@ $(document).ready(function() {
         })
 
 
-    }, 1000);
+    }, 2000);
 
 });
 
